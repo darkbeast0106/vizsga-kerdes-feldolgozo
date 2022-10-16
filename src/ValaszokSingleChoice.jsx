@@ -19,11 +19,14 @@ class ValaszokSingleChoice extends Component {
           key={valaszLehetoseg.id}
         >
           <input
-            className="form-check-input me-2"
+            className="form-check-input"
             type="radio"
             name={azonosito}
+            id={azonosito + valaszLehetoseg.id}
           />
-          <span
+          <label
+            className="ps-2"
+            htmlFor={azonosito + valaszLehetoseg.id}
             dangerouslySetInnerHTML={{ __html: valaszLehetosegSzoveg }}
           />
         </li>

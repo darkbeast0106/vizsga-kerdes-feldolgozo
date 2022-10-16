@@ -6,8 +6,10 @@ class KerdesLista extends Component {
         const { kerdesek } = this.props;
         const kerdesLista = [];
         let i = 0;
-        kerdesek.forEach(kerdes => {
-            kerdesLista.push(<KerdesCard key={i} kerdes={kerdes} />)
+        const date = new Date();
+        kerdesek.forEach(kerdes => {            
+            const key = i + date.toUTCString();
+            kerdesLista.push(<KerdesCard key={key} kerdes={kerdes} azonosito={key} />)
             i++;
         });
 

@@ -3,11 +3,19 @@ import katex from "katex";
 //import "./KerdesCard.css";
 
 class KerdesCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      displayAnswer: false,
+    };
+  }
+
   render() {
     const { kerdes } = this.props;
     const kerdesSzoveg = this.replaceKatex(kerdes.description);
     const valaszLehetosegek = kerdes.answerOptions;
     const valaszLista = [];
+    console.log(kerdes);
     valaszLehetosegek.forEach((valaszLehetoseg) => {
       const valaszLehetosegSzoveg = this.replaceKatex(
         valaszLehetoseg.description
@@ -24,6 +32,9 @@ class KerdesCard extends Component {
       <div className="card mb-3">
         <div className="card-header">
           <strong dangerouslySetInnerHTML={{ __html: kerdesSzoveg }}></strong>
+          {kerdes.asset && kerdes.asset.assetType === "Image" && (
+          <img className="img-fluid" src={kerdes.asset.uri} alt="asset" />
+        )}
         </div>
         <div className="card-body">
           <ul className="list-group list-group-flush">{valaszLista}</ul>
@@ -39,7 +50,6 @@ class KerdesCard extends Component {
       const katexText = text.substring(startIndex, endIndex);
 
       const katexContent = text.substring(startIndex + 7, endIndex - 8);
-      console.log(katexContent);
       const html = katex.renderToString(katexContent, {
         throwOnError: false,
         output: "html",

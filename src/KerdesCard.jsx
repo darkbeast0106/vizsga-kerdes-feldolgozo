@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import katex from "katex";
+import classNames from 'classnames';
 //import "./KerdesCard.css";
 
 class KerdesCard extends Component {
@@ -15,14 +16,16 @@ class KerdesCard extends Component {
     const kerdesSzoveg = this.replaceKatex(kerdes.description);
     const valaszLehetosegek = kerdes.answerOptions;
     const valaszLista = [];
-    console.log(kerdes);
+    const { displayAnswer } = this.state;
     valaszLehetosegek.forEach((valaszLehetoseg) => {
       const valaszLehetosegSzoveg = this.replaceKatex(
         valaszLehetoseg.description
       );
       valaszLista.push(
         <li
-          className="list-group-item"
+          className={classNames("list-group-item", {
+            "list-group-item-success": displayAnswer && kerdes.questions[0].correctAnswers.includes(valaszLehetoseg.id)
+          })}
           key={valaszLehetoseg.id}
           dangerouslySetInnerHTML={{ __html: valaszLehetosegSzoveg }}
         />
@@ -38,6 +41,18 @@ class KerdesCard extends Component {
         </div>
         <div className="card-body">
           <ul className="list-group list-group-flush">{valaszLista}</ul>
+        </div>
+        <div className="card-footer d-grid gap-2">
+          <button className={
+            classNames("btn", {
+              "btn-outline-success": !displayAnswer,
+              "btn-outline-danger": displayAnswer,
+            } )
+          }
+          
+          onClick={() => this.setState({
+            displayAnswer: !displayAnswer
+          })}>Válasz {displayAnswer ? "elrejtése" : "mutatása"}</button>
         </div>
       </div>
     );

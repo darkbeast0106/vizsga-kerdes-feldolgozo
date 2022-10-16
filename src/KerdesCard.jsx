@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import katex from "katex";
-import classNames from 'classnames';
+import classNames from "classnames";
 //import "./KerdesCard.css";
 
 class KerdesCard extends Component {
@@ -12,11 +12,14 @@ class KerdesCard extends Component {
   }
 
   render() {
-    const { kerdes } = this.props;
+    const { kerdes, azonosito } = this.props;
     const kerdesSzoveg = this.replaceKatex(kerdes.description);
     const valaszLehetosegek = kerdes.answerOptions;
     const valaszLista = [];
     const { displayAnswer } = this.state;
+    if (kerdes.type !== "SingleChoice" && kerdes.type !== "MultiChoice  ") {
+      console.log(kerdes);
+    }
     valaszLehetosegek.forEach((valaszLehetoseg) => {
       const valaszLehetosegSzoveg = this.replaceKatex(
         valaszLehetoseg.description
@@ -24,11 +27,30 @@ class KerdesCard extends Component {
       valaszLista.push(
         <li
           className={classNames("list-group-item", {
-            "list-group-item-success": displayAnswer && kerdes.questions[0].correctAnswers.includes(valaszLehetoseg.id)
+            "list-group-item-success":
+              displayAnswer &&
+              kerdes.questions[0].correctAnswers.includes(valaszLehetoseg.id),
           })}
           key={valaszLehetoseg.id}
-          dangerouslySetInnerHTML={{ __html: valaszLehetosegSzoveg }}
-        />
+        >
+          {kerdes.type === "SingleChoice" && (
+            <input
+              className="form-check-input me-2"
+              type="radio"
+              name={azonosito}
+            />
+          )}
+          {kerdes.type === "MultiChoice" && (
+            <input
+              className="form-check-input me-2"
+              type="checkbox"
+              name={azonosito+"[]"}
+            />
+          )}
+          <span
+            dangerouslySetInnerHTML={{ __html: valaszLehetosegSzoveg }}
+          ></span>
+        </li>
       );
     });
     return (
@@ -36,23 +58,26 @@ class KerdesCard extends Component {
         <div className="card-header">
           <strong dangerouslySetInnerHTML={{ __html: kerdesSzoveg }}></strong>
           {kerdes.asset && kerdes.asset.assetType === "Image" && (
-          <img className="img-fluid" src={kerdes.asset.uri} alt="asset" />
-        )}
+            <img className="img-fluid" src={kerdes.asset.uri} alt="asset" />
+          )}
         </div>
         <div className="card-body">
           <ul className="list-group list-group-flush">{valaszLista}</ul>
         </div>
         <div className="card-footer d-grid gap-2">
-          <button className={
-            classNames("btn", {
+          <button
+            className={classNames("btn", {
               "btn-outline-success": !displayAnswer,
               "btn-outline-danger": displayAnswer,
-            } )
-          }
-          
-          onClick={() => this.setState({
-            displayAnswer: !displayAnswer
-          })}>Válasz {displayAnswer ? "elrejtése" : "mutatása"}</button>
+            })}
+            onClick={() =>
+              this.setState({
+                displayAnswer: !displayAnswer,
+              })
+            }
+          >
+            Válasz {displayAnswer ? "elrejtése" : "mutatása"}
+          </button>
         </div>
       </div>
     );

@@ -19,11 +19,16 @@ class ValaszokMultiChoice extends Component {
           key={valaszLehetoseg.id}
         >
           <input
-            className="form-check-input me-2"
+            className="form-check-input"
             type="checkbox"
             name={azonosito + "[]"}
+            id={azonosito + valaszLehetoseg.id}
           />
-          <span dangerouslySetInnerHTML={{ __html: valaszLehetosegSzoveg }} />
+          <label
+            className="ps-2"
+            htmlFor={azonosito + valaszLehetoseg.id}
+            dangerouslySetInnerHTML={{ __html: valaszLehetosegSzoveg }}
+          />
         </li>
       );
     });
